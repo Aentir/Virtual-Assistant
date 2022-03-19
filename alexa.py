@@ -6,6 +6,7 @@ from datetime import datetime, date, timedelta
 import AVMSpeechMath as sm
 import requests
 from translate import Translator
+import connectiondb
 
 #Se inician los paquetes speech_recognition y pyttsx3
 listener = sr.Recognizer() #Se instancia la clase speech_recognition con su funcionalidad "Recognizer"
@@ -44,7 +45,7 @@ def listen():
             print("Listening...")
             listener.adjust_for_ambient_noise(source, duration=1)
             voice = listener.listen(source)
-            rec = ""
+            #rec = ""
     try:
         
             #El parametro "language" ayuda al reconocimiento de la voz, forzando a que sea en español en este caso
@@ -57,6 +58,7 @@ def listen():
                 toggle = run(rec)
                 print(rec)
             else:
+                print(rec)
                 talk("Vuelve a intentarlo, no conozco: " + rec)         
     except:
         pass
@@ -78,6 +80,7 @@ def run(rec):
     #rec = listen()
     if 'reproduce' in rec:
         music = rec.replace('reproduce', '')
+        #print(rec)
         talk('Reproduciendo ' + music)
         pywhatkit.playonyt(music)
     #elif 'que' in rec:
@@ -92,7 +95,7 @@ def run(rec):
         #             talk(f"Hoy es {getDay()}")
         
     elif 'cuanto es' in rec:
-        #print(rec)
+        print(rec)
         talk(sm.getResult(rec))
         
     elif 'tiempo en' in rec:
@@ -140,6 +143,12 @@ def run(rec):
         # talk("La latitud es: " + str(latitude))
         # talk("La longitud es: " + str(longitude))
         talk("Hace un día " + translation)
+    
+    elif 'base de datos' in rec:
+        talk(connectiondb.databaseInfo())
+        
+    elif 'añadir' in rec:
+        connectiondb.insertDatabase()
             
     elif 'apagate' in rec:
         toggle = 0
