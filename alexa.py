@@ -1,4 +1,4 @@
-from flask import request
+# from flask import request
 import speech_recognition as sr #Importo paquete de reconocimiento de voz
 import pyttsx3                  #Importo paquete para reproducir por audio
 import pywhatkit
@@ -6,20 +6,13 @@ from datetime import datetime, date, timedelta
 import AVMSpeechMath as sm
 import requests
 from translate import Translator
-import connectiondb
+import database_methods
 
 #Se inician los paquetes speech_recognition y pyttsx3
 listener = sr.Recognizer() #Se instancia la clase speech_recognition con su funcionalidad "Recognizer"
 engine = pyttsx3.init()    #Inicializo el modulo
 name = 'alexa'
 toggle = 1
-
-#city = "Valencia"
-
-
-# print(temp)
-# print(wind)
-# print(description)
 
 day_es = [line.rstrip('\n') for line in open('src/day/day_es.txt')]
 day_en = [line.rstrip('\n') for line in open('src/day/day_en.txt')]
@@ -41,17 +34,17 @@ engine.setProperty('voice', voices[0].id)   #Establezco la voz que voy a usar
 def listen():
     
     toggle = 1
-    with sr.Microphone() as source:
+    try:
+        with sr.Microphone() as source:
             print("Listening...")
             listener.adjust_for_ambient_noise(source, duration=1)
             voice = listener.listen(source)
             #rec = ""
-    try:
         
             #El parametro "language" ayuda al reconocimiento de la voz, forzando a que sea en español en este caso
             rec = listener.recognize_google(voice, language='es-ES').lower()
             #Se eliminan los acentos de cualquier vocal
-            rec = rec.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+            rec = rec.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ny", "ñ")
             #rec = rec.lower()
             if name in rec:
                 rec = rec.replace(name, '')
@@ -130,25 +123,32 @@ def run(rec):
         print(data)
         temp = data["main"]["temp"]
         wind_speed = data["wind"]["speed"]
-
-        # latitude = data["coord"]["lat"]
-        # longitude = data["coord"]["lon"]
-
         description = data["weather"][0]["description"]
+        
         translate = Translator(to_lang="Spanish")
         translation = translate.translate(description)
         print(temp)
         talk("La temperatura es: " + str(float(temp)))               
         talk("La velocidad del viento es:" + str(wind_speed))
-        # talk("La latitud es: " + str(latitude))
-        # talk("La longitud es: " + str(longitude))
         talk("Hace un día " + translation)
     
-    elif 'base de datos' in rec:
-        talk(connectiondb.databaseInfo())
+    elif 'dame' in rec:
+        print(rec)
+        if 'receta macarrones' in rec:
+            keyword = 'macarrones'
+            talk(database_methods.databaseInfo(keyword))
+        else:
+            talk("No he encontrado nada")
+    
+    elif 'apunta' in rec:
+        #print(rec)
+        info = rec.replace('apunta', '')
+        array = info.split()
+        print(array)
+        #database_methods.insertDatabase(info)
         
-    elif 'añadir' in rec:
-        connectiondb.insertDatabase()
+    # elif 'añadir' in rec:
+    #     database_methods.insertDatabase()
             
     elif 'apagate' in rec:
         toggle = 0
