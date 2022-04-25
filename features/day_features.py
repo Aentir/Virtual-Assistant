@@ -1,8 +1,9 @@
+from contextlib import nullcontext
 from datetime import date
+from features.talk_feature import talk
 
 day_es = [line.rstrip('\n') for line in open('day/day_es.txt')]
 day_en = [line.rstrip('\n') for line in open('day/day_en.txt')]
-
 
 def iterateDays(now):
     for i in range(len(day_en)):
@@ -13,3 +14,6 @@ def iterateDays(now):
 def getDay():
     now = date.today().strftime("%A, %d de %B del %Y").lower()
     return iterateDays(now)
+
+def responseDay(rec = nullcontext):
+    talk(f"Hoy es {getDay()}")
