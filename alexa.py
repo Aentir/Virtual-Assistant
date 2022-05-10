@@ -1,6 +1,7 @@
 import speech_recognition as sr #Importo paquete de reconocimiento de voz
 #import pyttsx3                  #Importo paquete para reproducir por audio
-import database_methods
+from features.selectDatabase import selectDatabase
+from features.insertDatabase import insertDatabase
 from features.day_features import responseDay
 from features.hour_feature import getHour
 from features.calc_feature import getCalc
@@ -10,7 +11,7 @@ from features.adios_feature import adios
 from voice_config.voice_id import voiceId 
 from voice_config.voice_rate import voiceRate
 from features_list.features_list import features_list
-import formatter_rec
+from formatter_voice_input.formatter_rec import formatter
 
 #Se inician los paquetes speech_recognition y pyttsx3
 listener = sr.Recognizer() #Se instancia la clase speech_recognition con su funcionalidad "Recognizer"
@@ -32,6 +33,8 @@ features = {
         'que dia': responseDay,
         'cuanto es': getCalc,
         'tiempo en': getWeather,
+        'dame': selectDatabase,
+        'apunta': insertDatabase,
         'apagate': adios
 }
 
@@ -52,14 +55,14 @@ def listen():
             rec = rec.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ny", "ñ")
             #rec = rec.lower()
             if name in rec:
-                formatter_rec.formatter(rec)
+                formatter(rec)
                 #print(rec.split())
                 # array_name = rec.split()
                 # array_name.pop(0)
                 # #print(' '.join(array_name))
                 # #print(rec)
                 # rec = ' '.join(array_name)
-                toggle = run(formatter_rec.formatter(rec))
+                toggle = run(formatter(rec))
                 #print(rec)
             # else:
             #     print(rec)

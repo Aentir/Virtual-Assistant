@@ -1,10 +1,9 @@
 import pywhatkit
 from features.talk_feature import talk
-import formatter_rec
+from formatter_voice_input.formatter_rec import formatter
 
 
 def reproduce(rec):
-    music = formatter_rec.formatter(rec)
-    #music = rec.replace('reproduce', '')
+    music = formatter(rec)
     talk('Reproduciendo ' + music)
     pywhatkit.playonyt(music)
