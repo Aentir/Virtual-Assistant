@@ -10,6 +10,7 @@ from features.adios_feature import adios
 from voice_config.voice_id import voiceId 
 from voice_config.voice_rate import voiceRate
 from features_list.features_list import features_list
+import formatter_rec
 
 #Se inician los paquetes speech_recognition y pyttsx3
 listener = sr.Recognizer() #Se instancia la clase speech_recognition con su funcionalidad "Recognizer"
@@ -31,7 +32,7 @@ features = {
         'que dia': responseDay,
         'cuanto es': getCalc,
         'tiempo en': getWeather,
-        'adios': adios
+        'apagate': adios
 }
 
 # Guardamos la entrada por voz y la redirigimos a otras funciones si conoce la petición, sino, nos devuelve mensaje de "error"
@@ -51,13 +52,14 @@ def listen():
             rec = rec.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ny", "ñ")
             #rec = rec.lower()
             if name in rec:
+                formatter_rec.formatter(rec)
                 #print(rec.split())
-                array_name = rec.split()
-                array_name.pop(0)
-                #print(' '.join(array_name))
-                #print(rec)
-                rec = ' '.join(array_name)
-                toggle = run(rec)
+                # array_name = rec.split()
+                # array_name.pop(0)
+                # #print(' '.join(array_name))
+                # #print(rec)
+                # rec = ' '.join(array_name)
+                toggle = run(formatter_rec.formatter(rec))
                 #print(rec)
             # else:
             #     print(rec)
@@ -72,7 +74,7 @@ def listen():
 def run(rec):
     #rec = listen()
     if 'apagate' in rec:
-        features['adios'](rec)
+        features['apagate'](rec)
         toggle = 0
     else:
         for feature in features:

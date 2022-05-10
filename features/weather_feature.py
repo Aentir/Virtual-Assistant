@@ -1,9 +1,10 @@
 import requests
 from translate import Translator
 from features.talk_feature import talk
+import formatter_rec
 
 def getWeather(rec):
-    city = rec.replace('tiempo en', '')
+    city = formatter_rec.formatter(rec)
     url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=f2b990c09e6f73102863cfe63a569f43&units=metric".format(city) #.format importante
     res = requests.get(url)
     data = res.json()
