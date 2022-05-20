@@ -1,8 +1,8 @@
 from database_connection.connectiondb import connection
-from features.talk_feature import talk
+from custom_features.talk_feature import talk
 from formatter_voice_input.formatter_rec import formatter
 
-def selectDatabase(keyword):
+def select_database(keyword):
     keyword = formatter(keyword)
     #id = id
     try:

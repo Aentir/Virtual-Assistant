@@ -1,5 +1,5 @@
 import pywhatkit
-from features.talk_feature import talk
+from custom_features.talk_feature import talk
 from formatter_voice_input.formatter_rec import formatter
 
 

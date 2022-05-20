@@ -1,13 +1,14 @@
 import requests
 from translate import Translator
-from features.talk_feature import talk
+from custom_features.talk_feature import talk
 from formatter_voice_input.formatter_rec import formatter
 
-def getWeather(rec):
+def get_weather(rec):
     city = formatter(rec).split()
     city.pop(0)
     city = ' '.join(city)
     url = "http://api.openweathermap.org/data/2.5/weather?q={}&lang=es&appid=f2b990c09e6f73102863cfe63a569f43&units=metric".format(city) #.format importante
+    print(url)
     res = requests.get(url)
     data = res.json()
     temp = data["main"]["temp"]
