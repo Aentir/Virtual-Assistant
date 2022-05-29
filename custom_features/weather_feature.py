@@ -1,13 +1,12 @@
 import requests
-from translate import Translator
-from custom_features.talk_feature import talk
+from voice_config.talk_feature import talk
 from formatter_voice_input.formatter_rec import formatter
 
 def get_weather(rec):
     city = formatter(rec).split()
     city.pop(0)
     city = ' '.join(city)
-    url = "http://api.openweathermap.org/data/2.5/weather?q={}&lang=es&appid=f2b990c09e6f73102863cfe63a569f43&units=metric".format(city) #.format importante
+    url = "http://api.openweathermap.org/data/2.5/weather?q={}&lang=es&appid=f2b990c09e6f73102863cfe63a569f43&units=metric".format(city)
     print(url)
     res = requests.get(url)
     data = res.json()
@@ -18,8 +17,6 @@ def get_weather(rec):
     print(wind_speed)
     print(description)
         
-    # translate = Translator(to_lang="Spanish")
-    # translation = translate.translate(description)
     talk("La temperatura es: " + str(float(temp)) + " grados")               
     talk("La velocidad del viento es:" + str(wind_speed) + " kilometros hora")
     talk("Hace un día " + description)

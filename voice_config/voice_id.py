@@ -1,6 +1,7 @@
+#Paquete para dotar de habla a la aplicación
 import pyttsx3 
 
-def voiceId():
+def voice_id():
     engine = pyttsx3.init()
-    voices = engine.getProperty('voices')   #Elijo la voz que voy a usar
-    engine.setProperty('voice', voices[0].id)   #Establezco la voz que voy a usar
+    voices = engine.getProperty('voices')   #Voz a usar
+    engine.setProperty('voice', voices[0].id)   #Establece usar

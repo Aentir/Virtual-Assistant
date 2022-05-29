@@ -1,6 +1,6 @@
 from contextlib import nullcontext
 from datetime import date
-from custom_features.talk_feature import talk
+from voice_config.talk_feature import talk
 
 day_es = [line.rstrip('\n') for line in open('day/day_es.txt')]
 day_en = [line.rstrip('\n') for line in open('day/day_en.txt')]

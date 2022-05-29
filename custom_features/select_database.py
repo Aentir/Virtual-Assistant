@@ -1,23 +1,42 @@
-from database_connection.connectiondb import connection
-from custom_features.talk_feature import talk
-from formatter_voice_input.formatter_rec import formatter
+from contextlib import nullcontext
+from database_connection.connection_db import connection
+from voice_config.talk_feature import talk
 
-def select_database(keyword):
-    keyword = formatter(keyword)
-    #id = id
+def get_all_notes(rec = nullcontext):
     try:
         conn = connection()
         cursor = conn.cursor()
-        #cursor.execute("SELECT * FROM learning WHERE idlearning=" + str(id) + ";")  #Necesaria conversión de int a str
-        #cursor.execute("SELECT * FROM learning WHERE key_word='macarrones';")
-        cursor.execute("SELECT * FROM learning WHERE key_word='{0}'".format(keyword))
+        cursor.execute("SELECT * FROM learning")
         result = cursor.fetchall()
-        for row in result:
-            print(row[1])
-        #print(id)
-        talk(row[1])
+        if len(result) != 0:
+            for row in result:
+                print(row)  
+                talk(row[1])
+        else:
+            talk("No tienes notas guardadas")
     except:
         print("Database connection error")
     finally:
+        cursor.close()
         conn.close()
-    return row[1]
+    return row
+
+
+def get_last_note(rec = nullcontext):
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT description FROM learning ORDER BY idlearning DESC LIMIT 1")
+        result = cursor.fetchone()
+        if len(result) != 0:
+            for row in result:
+                print(row)  
+                talk(row)
+        else:
+            talk("No tienes notas guardadas")
+    except:
+        print("Database connection error")
+    finally:
+        cursor.close()
+        conn.close()
+    return result
